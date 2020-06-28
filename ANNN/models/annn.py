@@ -5,7 +5,7 @@ from .nn import ReLU
 
 
 class ANNN(fluid.dygraph.Layer):
-    def __init__(self, backbone="resnet50", pretrained=False, root=None):
+    def __init__(self, backbone="resnet50", pretrained=False, root=None, nclass=21):
         super(ANNN, self).__init__()
         if backbone == "resnet50":
             self.backbone = resnet50(pretrained, root)
@@ -14,7 +14,7 @@ class ANNN(fluid.dygraph.Layer):
         elif backbone == "resnet152":
             self.backbone = resnet152(pretrained, root)
 
-        self.head = None
+        self.head = ANNN_Head(nclass, fluid.dygraph.BatchNorm)
 
     def forward(self, x):
         imsize = x.shape[2:]
